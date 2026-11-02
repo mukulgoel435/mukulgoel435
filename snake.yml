@@ -1,0 +1,249 @@
+name: Generate Profile Cards
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build stats, languages, activity, trophies, header & footer
+        env:
+          GH_TOKEN: ${{ secrets.STATS_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_LOGIN: ${{ github.repository_owner }}
+          DISPLAY_NAME: Mukul Goel
+          SUBTITLE: Full Stack & Mobile App Developer
+        run: |
+          cat > cards.mjs <<'EOF_SCRIPT'
+          // Generates profile SVG cards into ./dist using the GitHub GraphQL API.
+          // Env: GH_LOGIN (username), GH_TOKEN (token), MOCK=1 to use sample data.
+          import { mkdirSync, writeFileSync } from "node:fs";
+
+          const LOGIN = process.env.GH_LOGIN;
+          const NAME = process.env.DISPLAY_NAME || LOGIN;
+          const SUBTITLE = process.env.SUBTITLE || "";
+          const OUT = "dist";
+          mkdirSync(OUT, { recursive: true });
+
+          const C = {
+            bg: "#0D1117", border: "#30363D", title: "#70A5FD", text: "#A9B1D6",
+            value: "#38BDAE", accent: "#BF91F3", purple: "#7F00FF", cyan: "#00D4FF",
+          };
+          const FONT = "'Segoe UI', Ubuntu, 'Helvetica Neue', Arial, sans-serif";
+          const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+          const fmt = (n) => (n >= 10000 ? (n / 1000).toFixed(1).replace(/\.0$/, "") + "k" : n.toLocaleString("en-US"));
+          const short = (n) => (n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, "") + "k" : String(n));
+
+          const QUERY = `query($login:String!){ user(login:$login){
+            createdAt followers{totalCount}
+            contributionsCollection{ totalCommitContributions restrictedContributionsCount
+              totalPullRequestContributions totalIssueContributions
+              contributionCalendar{ totalContributions weeks{ contributionDays{ date contributionCount } } } }
+            repositoriesContributedTo(contributionTypes:[COMMIT,PULL_REQUEST,ISSUE,REPOSITORY]){totalCount}
+            pullRequests{totalCount} issues{totalCount}
+            repositories(first:100, ownerAffiliations:OWNER, isFork:false, orderBy:{field:UPDATED_AT,direction:DESC}){
+              totalCount nodes{ stargazerCount languages(first:10, orderBy:{field:SIZE,direction:DESC}){ edges{ size node{ name color } } } } }
+          }}`;
+
+          async function load() {
+            if (process.env.MOCK) {
+              const days = [];
+              const start = new Date(Date.now() - 370 * 864e5);
+              for (let i = 0; i < 371; i++) {
+                const d = new Date(start.getTime() + i * 864e5);
+                days.push({ date: d.toISOString().slice(0, 10), contributionCount: Math.max(0, Math.round(Math.sin(i / 5) * 4 + Math.random() * 6 - 2)) });
+              }
+              const weeks = []; for (let i = 0; i < days.length; i += 7) weeks.push({ contributionDays: days.slice(i, i + 7) });
+              return {
+                createdAt: "2020-11-09T00:00:00Z", followers: { totalCount: 14 },
+                contributionsCollection: { totalCommitContributions: 420, restrictedContributionsCount: 610, totalPullRequestContributions: 18, totalIssueContributions: 6, contributionCalendar: { totalContributions: 1100, weeks } },
+                repositoriesContributedTo: { totalCount: 9 }, pullRequests: { totalCount: 31 }, issues: { totalCount: 8 },
+                repositories: { totalCount: 26, nodes: [
+                  { stargazerCount: 3, languages: { edges: [{ size: 900000, node: { name: "JavaScript", color: "#f1e05a" } }, { size: 200000, node: { name: "CSS", color: "#563d7c" } }] } },
+                  { stargazerCount: 1, languages: { edges: [{ size: 500000, node: { name: "PHP", color: "#4F5D95" } }, { size: 120000, node: { name: "HTML", color: "#e34c26" } }] } },
+                  { stargazerCount: 0, languages: { edges: [{ size: 300000, node: { name: "TypeScript", color: "#3178c6" } }, { size: 90000, node: { name: "Java", color: "#b07219" } }, { size: 40000, node: { name: "Python", color: "#3572A5" } }] } },
+                ] },
+              };
+            }
+            const res = await fetch("https://api.github.com/graphql", {
+              method: "POST",
+              headers: { Authorization: `bearer ${process.env.GH_TOKEN}`, "Content-Type": "application/json", "User-Agent": "profile-cards" },
+              body: JSON.stringify({ query: QUERY, variables: { login: LOGIN } }),
+            });
+            const json = await res.json();
+            if (!json.data?.user) throw new Error("GraphQL error: " + JSON.stringify(json.errors || json));
+            return json.data.user;
+          }
+
+          const shell = (w, h, body, extra = "") => `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" font-family="${FONT}">
+          <style>@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.f{opacity:0;animation:fade .6s ease forwards}${extra}</style>
+          <rect x="0.5" y="0.5" width="${w - 1}" height="${h - 1}" rx="10" fill="${C.bg}" stroke="${C.border}"/>
+          ${body}</svg>`;
+
+          // ---------- header / footer ----------
+          function wave(w, h, flip, title, sub) {
+            const y = (v) => (flip ? h - v : v);
+            const p = (a, b) => `M0 0 H${w} V${y(h - a)} C${w * 0.75} ${y(h - b)} ${w * 0.6} ${y(h + 10 - a)} ${w * 0.45} ${y(h - b)} S${w * 0.15} ${y(h - a + 10)} 0 ${y(h - b + 5)} Z`;
+            const shape = flip ? `transform="translate(0 ${h}) scale(1 -1)"` : "";
+            const a1 = p(40, 70), a2 = p(60, 35);
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" font-family="${FONT}">
+          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="${flip ? C.cyan : C.purple}"/><stop offset="1" stop-color="${flip ? C.purple : C.cyan}"/></linearGradient>
+          <style>@keyframes fade{from{opacity:0}to{opacity:1}}.t{opacity:0;animation:fade 1.2s ease .2s forwards}.s{opacity:0;animation:fade 1.2s ease .9s forwards}</style></defs>
+          <g ${shape}>
+          <path fill="url(#g)" opacity=".35" d="${a2}"><animate attributeName="d" dur="8s" repeatCount="indefinite" values="${a2};${a1};${a2}"/></path>
+          <path fill="url(#g)" d="${a1}"><animate attributeName="d" dur="8s" repeatCount="indefinite" values="${a1};${a2};${a1}"/></path>
+          </g>
+          ${title ? `<text class="t" x="50%" y="${h * 0.38}" text-anchor="middle" fill="#fff" font-size="40" font-weight="700">${esc(title)}</text>` : ""}
+          ${sub ? `<text class="s" x="50%" y="${h * 0.38 + 38}" text-anchor="middle" fill="#fff" font-size="19" opacity=".9">${esc(sub)}</text>` : ""}
+          </svg>`;
+          }
+
+          // ---------- stats ----------
+          function statsCard(u) {
+            const cc = u.contributionsCollection;
+            const stars = u.repositories.nodes.reduce((s, r) => s + r.stargazerCount, 0);
+            const rows = [
+              ["★", "Total Stars Earned", stars],
+              ["●", "Commits (last year)", cc.totalCommitContributions + cc.restrictedContributionsCount],
+              ["⇄", "Pull Requests", u.pullRequests.totalCount],
+              ["!", "Issues", u.issues.totalCount],
+              ["◆", "Contributed to (last year)", u.repositoriesContributedTo.totalCount],
+              ["▣", "Public Repositories", u.repositories.totalCount],
+            ];
+            const total = cc.contributionCalendar.totalContributions;
+            const body = rows.map(([ic, label, v], i) => `<g class="f" style="animation-delay:${150 + i * 120}ms" transform="translate(25 ${70 + i * 25})">
+          <text fill="${C.accent}" font-size="13" font-weight="700">${ic}</text>
+          <text x="22" fill="${C.text}" font-size="14" font-weight="600">${label}:</text>
+          <text x="235" fill="${C.value}" font-size="14" font-weight="700">${fmt(v)}</text></g>`).join("\n");
+            const r = 42, circ = 2 * Math.PI * r, pct = Math.min(1, total / 1500);
+            const ring = `<g transform="translate(400 112)">
+          <circle r="${r}" fill="none" stroke="${C.title}" stroke-opacity=".2" stroke-width="6"/>
+          <circle r="${r}" fill="none" stroke="url(#rg)" stroke-width="6" stroke-linecap="round" transform="rotate(-90)" stroke-dasharray="${circ}" stroke-dashoffset="${circ}">
+          <animate attributeName="stroke-dashoffset" from="${circ}" to="${circ * (1 - pct)}" dur="1.2s" fill="freeze"/></circle>
+          <text text-anchor="middle" y="2" fill="${C.value}" font-size="22" font-weight="800">${short(total)}</text>
+          <text text-anchor="middle" y="20" fill="${C.text}" font-size="10">contributions</text></g>`;
+            return shell(495, 230, `<defs><linearGradient id="rg"><stop offset="0" stop-color="${C.purple}"/><stop offset="1" stop-color="${C.cyan}"/></linearGradient></defs>
+          <text x="25" y="38" fill="${C.title}" font-size="18" font-weight="700">${esc(NAME)}'s GitHub Stats</text>
+          ${body}
+          ${ring}`);
+          }
+
+          // ---------- languages ----------
+          function langsCard(u) {
+            const m = new Map();
+            for (const r of u.repositories.nodes) for (const e of r.languages.edges) {
+              const cur = m.get(e.node.name) || { size: 0, color: e.node.color || "#888" };
+              cur.size += e.size; m.set(e.node.name, cur);
+            }
+            const list = [...m.entries()].sort((a, b) => b[1].size - a[1].size).slice(0, 8);
+            const sum = list.reduce((s, [, v]) => s + v.size, 0) || 1;
+            const W = 300; let x = 0;
+            const bar = list.map(([, v]) => { const w = (v.size / sum) * W; const s = `<rect x="${x}" width="${w}" height="8" fill="${v.color}"/>`; x += w; return s; }).join("");
+            const items = list.map(([n, v], i) => {
+              const col = i % 2, row = Math.floor(i / 2);
+              return `<g class="f" style="animation-delay:${200 + i * 100}ms" transform="translate(${25 + col * 155} ${100 + row * 26})">
+          <circle cx="5" cy="-4" r="5" fill="${v.color}"/><text x="16" fill="${C.text}" font-size="12">${esc(n)} <tspan fill="${C.value}">${((v.size / sum) * 100).toFixed(1)}%</tspan></text></g>`;
+            }).join("\n");
+            return shell(350, 230, `<text x="25" y="38" fill="${C.title}" font-size="18" font-weight="700">Most Used Languages</text>
+          <clipPath id="c"><rect width="${W}" height="8" rx="4"/></clipPath>
+          <g transform="translate(25 62)" clip-path="url(#c)">${bar || `<rect width="${W}" height="8" fill="${C.border}"/>`}</g>
+          ${items || `<text x="25" y="110" fill="${C.text}" font-size="12">No public language data yet</text>`}`);
+          }
+
+          // ---------- activity graph ----------
+          function activityCard(u) {
+            const days = u.contributionsCollection.contributionCalendar.weeks.flatMap((w) => w.contributionDays).slice(-31);
+            const W = 900, H = 300, L = 55, R = 25, T = 60, B = 50;
+            const max = Math.max(4, ...days.map((d) => d.contributionCount));
+            const step = (W - L - R) / (days.length - 1);
+            const pt = days.map((d, i) => [L + i * step, T + (H - T - B) * (1 - d.contributionCount / max)]);
+            const line = pt.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+            const area = `${line} L${pt.at(-1)[0]} ${H - B} L${L} ${H - B} Z`;
+            const grid = [0, 0.25, 0.5, 0.75, 1].map((f) => { const y = T + (H - T - B) * (1 - f);
+              return `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" stroke="${C.border}" stroke-dasharray="3 4"/><text x="${L - 10}" y="${y + 4}" text-anchor="end" fill="${C.text}" font-size="11">${Math.round(max * f)}</text>`; }).join("");
+            const labels = days.map((d, i) => (i % 5 === 0 || i === days.length - 1) ? `<text x="${pt[i][0]}" y="${H - B + 20}" text-anchor="middle" fill="${C.text}" font-size="11">${d.date.slice(8)}/${d.date.slice(5, 7)}</text>` : "").join("");
+            const dots = pt.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="#fff" class="f" style="animation-delay:${600 + i * 25}ms"/>`).join("");
+            const len = 4000;
+            return shell(W, H, `<defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.purple}" stop-opacity=".55"/><stop offset="1" stop-color="${C.purple}" stop-opacity="0"/></linearGradient></defs>
+          <text x="${W / 2}" y="36" text-anchor="middle" fill="${C.title}" font-size="18" font-weight="700">${esc(NAME)}'s Contribution Graph (last 31 days)</text>
+          ${grid}
+          <path d="${area}" fill="url(#ag)" class="f" style="animation-delay:400ms"/>
+          <path d="${line}" fill="none" stroke="${C.cyan}" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="${len}" stroke-dashoffset="${len}"><animate attributeName="stroke-dashoffset" from="${len}" to="0" dur="1.6s" fill="freeze"/></path>
+          ${dots}${labels}`);
+          }
+
+          // ---------- trophies ----------
+          function trophiesCard(u) {
+            const cc = u.contributionsCollection;
+            const years = Math.max(0, (Date.now() - new Date(u.createdAt)) / (365.25 * 864e5));
+            const stars = u.repositories.nodes.reduce((s, r) => s + r.stargazerCount, 0);
+            const defs = [
+              ["Commits", cc.totalCommitContributions + cc.restrictedContributionsCount, [1, 50, 200, 500, 1000, 2000]],
+              ["Contribs", cc.contributionCalendar.totalContributions, [1, 50, 200, 500, 1000, 2000]],
+              ["Repos", u.repositories.totalCount, [1, 5, 10, 20, 35, 50]],
+              ["Pull Reqs", u.pullRequests.totalCount, [1, 5, 10, 25, 50, 100]],
+              ["Followers", u.followers.totalCount, [1, 5, 10, 25, 50, 100]],
+              ["Stars", stars, [1, 5, 10, 30, 50, 100]],
+              ["Experience", Math.floor(years), [1, 2, 3, 4, 5, 7]],
+            ];
+            const ranks = ["C", "B", "A", "AA", "S", "SS", "SSS"];
+            const tierCol = ["#7a7a7a", "#c0c0c0", "#38BDAE", "#70A5FD", "#BF91F3", "#FFD700", "#FF6EC7"];
+            const size = 110, gap = 10;
+            const cells = defs.map(([label, v, th], i) => {
+              let t = 0; th.forEach((x, k) => { if (v >= x) t = k + 1; });
+              const col = tierCol[t], x = i * (size + gap);
+              return `<g class="f" style="animation-delay:${i * 120}ms" transform="translate(${x} 0)">
+          <rect x=".5" y=".5" width="${size - 1}" height="${size - 1}" rx="10" fill="${C.bg}" stroke="${C.border}"/>
+          <text x="${size - 10}" y="20" text-anchor="end" fill="${col}" font-size="12" font-weight="800">${ranks[t]}</text>
+          <g transform="translate(${size / 2} 44)" fill="${col}">
+          <path d="M-16 -18 H16 V-6 C16 6 8 13 0 13 C-8 13 -16 6 -16 -6 Z"/>
+          <path d="M-16 -14 H-23 C-23 -2 -18 2 -14 2" fill="none" stroke="${col}" stroke-width="3"/>
+          <path d="M16 -14 H23 C23 -2 18 2 14 2" fill="none" stroke="${col}" stroke-width="3"/>
+          <rect x="-3" y="12" width="6" height="7"/><rect x="-11" y="19" width="22" height="5" rx="2"/></g>
+          <text x="${size / 2}" y="88" text-anchor="middle" fill="${C.title}" font-size="12" font-weight="700">${label}</text>
+          <text x="${size / 2}" y="102" text-anchor="middle" fill="${C.text}" font-size="11">${fmt(v)}</text></g>`;
+            }).join("\n");
+            const W = defs.length * (size + gap) - gap;
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${size}" viewBox="0 0 ${W} ${size}" font-family="${FONT}">
+          <style>@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.f{opacity:0;animation:fade .6s ease forwards}</style>
+          ${cells}</svg>`;
+          }
+
+          const u = await load();
+          const files = {
+            "header.svg": wave(900, 220, false, `Hi there, I'm ${NAME} 👋`, SUBTITLE),
+            "footer.svg": wave(900, 120, true, "", ""),
+            "stats.svg": statsCard(u),
+            "top-langs.svg": langsCard(u),
+            "activity.svg": activityCard(u),
+            "trophies.svg": trophiesCard(u),
+          };
+          for (const [f, s] of Object.entries(files)) writeFileSync(`${OUT}/${f}`, s);
+          console.log("Generated:", Object.keys(files).join(", "));
+          EOF_SCRIPT
+          node cards.mjs
+
+      - uses: Platane/snk@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-snake.svg
+            dist/github-snake-dark.svg?palette=github-dark
+
+      - uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
