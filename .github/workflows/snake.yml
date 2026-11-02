@@ -87,7 +87,7 @@ jobs:
           }
 
           const shell = (w, h, body, extra = "") => `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" font-family="${FONT}">
-          <style>@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.f{opacity:0;animation:fade .6s ease forwards}${extra}</style>
+          <style>@keyframes fade{from{opacity:0}to{opacity:1}}.f{opacity:0;animation:fade .6s ease forwards}${extra}</style>
           <rect x="0.5" y="0.5" width="${w - 1}" height="${h - 1}" rx="10" fill="${C.bg}" stroke="${C.border}"/>
           ${body}</svg>`;
 
@@ -216,7 +216,7 @@ jobs:
             }).join("\n");
             const W = defs.length * (size + gap) - gap;
             return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${size}" viewBox="0 0 ${W} ${size}" font-family="${FONT}">
-          <style>@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.f{opacity:0;animation:fade .6s ease forwards}</style>
+          <style>@keyframes fade{from{opacity:0}to{opacity:1}}.f{opacity:0;animation:fade .6s ease forwards}</style>
           ${cells}</svg>`;
           }
 
