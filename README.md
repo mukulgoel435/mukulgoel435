@@ -58,15 +58,6 @@
 ---
 
 ## 🚀 Featured Projects
-
-<p align="center">
-  <a href="https://github.com/mukulgoel435/Factory-erp-app">
-    <img src="https://img.shields.io/badge/🏭_Factory_ERP_App-View_Repo-7F00FF?style=for-the-badge&labelColor=0D1117" />
-  </a>
-  <br/>
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" />
-</p>
-
 <p align="center">
   🔒 <b>Most of my production work lives in private repositories</b> for clients and companies.<br/>
   <sub>Happy to walk you through the code or give a live demo. Just <a href="mailto:mukulgoel791@gmail.com">reach out</a>.</sub>
