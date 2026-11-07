@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="495" height="230" viewBox="0 0 495 230" font-family="'Segoe UI', Ubuntu, 'Helvetica Neue', Arial, sans-serif">
+<style>@keyframes fade{from{opacity:0}to{opacity:1}}.f{opacity:0;animation:fade .6s ease forwards}</style>
+<rect x="0.5" y="0.5" width="494" height="229" rx="10" fill="#0D1117" stroke="#30363D"/>
+<defs><linearGradient id="rg"><stop offset="0" stop-color="#7F00FF"/><stop offset="1" stop-color="#00D4FF"/></linearGradient></defs>
+<text x="25" y="38" fill="#70A5FD" font-size="18" font-weight="700">Mukul Goel's GitHub Stats</text>
+<g class="f" style="animation-delay:150ms" transform="translate(25 70)">
+<text fill="#BF91F3" font-size="13" font-weight="700">★</text>
+<text x="22" fill="#A9B1D6" font-size="14" font-weight="600">Total Stars Earned:</text>
+<text x="235" fill="#38BDAE" font-size="14" font-weight="700">0</text></g>
+<g class="f" style="animation-delay:270ms" transform="translate(25 95)">
+<text fill="#BF91F3" font-size="13" font-weight="700">●</text>
+<text x="22" fill="#A9B1D6" font-size="14" font-weight="600">Commits (last year):</text>
+<text x="235" fill="#38BDAE" font-size="14" font-weight="700">1,060</text></g>
+<g class="f" style="animation-delay:390ms" transform="translate(25 120)">
+<text fill="#BF91F3" font-size="13" font-weight="700">⇄</text>
+<text x="22" fill="#A9B1D6" font-size="14" font-weight="600">Pull Requests:</text>
+<text x="235" fill="#38BDAE" font-size="14" font-weight="700">0</text></g>
+<g class="f" style="animation-delay:510ms" transform="translate(25 145)">
+<text fill="#BF91F3" font-size="13" font-weight="700">!</text>
+<text x="22" fill="#A9B1D6" font-size="14" font-weight="600">Issues:</text>
+<text x="235" fill="#38BDAE" font-size="14" font-weight="700">0</text></g>
+<g class="f" style="animation-delay:630ms" transform="translate(25 170)">
+<text fill="#BF91F3" font-size="13" font-weight="700">◆</text>
+<text x="22" fill="#A9B1D6" font-size="14" font-weight="600">Contributed to (last year):</text>
+<text x="235" fill="#38BDAE" font-size="14" font-weight="700">0</text></g>
+<g class="f" style="animation-delay:750ms" transform="translate(25 195)">
+<text fill="#BF91F3" font-size="13" font-weight="700">▣</text>
+<text x="22" fill="#A9B1D6" font-size="14" font-weight="600">Public Repositories:</text>
+<text x="235" fill="#38BDAE" font-size="14" font-weight="700">26</text></g>
+<g transform="translate(400 112)">
+<circle r="42" fill="none" stroke="#70A5FD" stroke-opacity=".2" stroke-width="6"/>
+<circle r="42" fill="none" stroke="url(#rg)" stroke-width="6" stroke-linecap="round" transform="rotate(-90)" stroke-dasharray="263.89378290154264" stroke-dashoffset="263.89378290154264">
+<animate attributeName="stroke-dashoffset" from="263.89378290154264" to="76.88105541864942" dur="1.2s" fill="freeze"/></circle>
+<text text-anchor="middle" y="2" fill="#38BDAE" font-size="22" font-weight="800">1.1k</text>
+<text text-anchor="middle" y="20" fill="#A9B1D6" font-size="10">contributions</text></g></svg>

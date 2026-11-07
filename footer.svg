@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="120" viewBox="0 0 900 120" font-family="'Segoe UI', Ubuntu, 'Helvetica Neue', Arial, sans-serif">
+<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#00D4FF"/><stop offset="1" stop-color="#7F00FF"/></linearGradient>
+<style>@keyframes fade{from{opacity:0}to{opacity:1}}.t{opacity:0;animation:fade 1.2s ease .2s forwards}.s{opacity:0;animation:fade 1.2s ease .9s forwards}</style></defs>
+<g transform="translate(0 120) scale(1 -1)">
+<path fill="url(#g)" opacity=".35" d="M0 0 H900 V60 C675 35 540 50 405 35 S135 50 0 30 Z"><animate attributeName="d" dur="8s" repeatCount="indefinite" values="M0 0 H900 V60 C675 35 540 50 405 35 S135 50 0 30 Z;M0 0 H900 V40 C675 70 540 30 405 70 S135 30 0 65 Z;M0 0 H900 V60 C675 35 540 50 405 35 S135 50 0 30 Z"/></path>
+<path fill="url(#g)" d="M0 0 H900 V40 C675 70 540 30 405 70 S135 30 0 65 Z"><animate attributeName="d" dur="8s" repeatCount="indefinite" values="M0 0 H900 V40 C675 70 540 30 405 70 S135 30 0 65 Z;M0 0 H900 V60 C675 35 540 50 405 35 S135 50 0 30 Z;M0 0 H900 V40 C675 70 540 30 405 70 S135 30 0 65 Z"/></path>
+</g>
+
+
+</svg>
