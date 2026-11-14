@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="830" height="110" viewBox="0 0 830 110" font-family="'Segoe UI', Ubuntu, 'Helvetica Neue', Arial, sans-serif">
+<style>@keyframes fade{from{opacity:0}to{opacity:1}}.f{opacity:0;animation:fade .6s ease forwards}</style>
+<g class="f" style="animation-delay:0ms" transform="translate(0 0)">
+<rect x=".5" y=".5" width="109" height="109" rx="10" fill="#0D1117" stroke="#30363D"/>
+<text x="100" y="20" text-anchor="end" fill="#FFD700" font-size="12" font-weight="800">SS</text>
+<g transform="translate(55 44)" fill="#FFD700">
+<path d="M-16 -18 H16 V-6 C16 6 8 13 0 13 C-8 13 -16 6 -16 -6 Z"/>
+<path d="M-16 -14 H-23 C-23 -2 -18 2 -14 2" fill="none" stroke="#FFD700" stroke-width="3"/>
+<path d="M16 -14 H23 C23 -2 18 2 14 2" fill="none" stroke="#FFD700" stroke-width="3"/>
+<rect x="-3" y="12" width="6" height="7"/><rect x="-11" y="19" width="22" height="5" rx="2"/></g>
+<text x="55" y="88" text-anchor="middle" fill="#70A5FD" font-size="12" font-weight="700">Commits</text>
+<text x="55" y="102" text-anchor="middle" fill="#A9B1D6" font-size="11">1,076</text></g>
+<g class="f" style="animation-delay:120ms" transform="translate(120 0)">
+<rect x=".5" y=".5" width="109" height="109" rx="10" fill="#0D1117" stroke="#30363D"/>
+<text x="100" y="20" text-anchor="end" fill="#FFD700" font-size="12" font-weight="800">SS</text>
+<g transform="translate(55 44)" fill="#FFD700">
+<path d="M-16 -18 H16 V-6 C16 6 8 13 0 13 C-8 13 -16 6 -16 -6 Z"/>
+<path d="M-16 -14 H-23 C-23 -2 -18 2 -14 2" fill="none" stroke="#FFD700" stroke-width="3"/>
+<path d="M16 -14 H23 C23 -2 18 2 14 2" fill="none" stroke="#FFD700" stroke-width="3"/>
+<rect x="-3" y="12" width="6" height="7"/><rect x="-11" y="19" width="22" height="5" rx="2"/></g>
+<text x="55" y="88" text-anchor="middle" fill="#70A5FD" font-size="12" font-weight="700">Contribs</text>
+<text x="55" y="102" text-anchor="middle" fill="#A9B1D6" font-size="11">1,079</text></g>
+<g class="f" style="animation-delay:240ms" transform="translate(240 0)">
+<rect x=".5" y=".5" width="109" height="109" rx="10" fill="#0D1117" stroke="#30363D"/>
+<text x="100" y="20" text-anchor="end" fill="#BF91F3" font-size="12" font-weight="800">S</text>
+<g transform="translate(55 44)" fill="#BF91F3">
+<path d="M-16 -18 H16 V-6 C16 6 8 13 0 13 C-8 13 -16 6 -16 -6 Z"/>
+<path d="M-16 -14 H-23 C-23 -2 -18 2 -14 2" fill="none" stroke="#BF91F3" stroke-width="3"/>
+<path d="M16 -14 H23 C23 -2 18 2 14 2" fill="none" stroke="#BF91F3" stroke-width="3"/>
+<rect x="-3" y="12" width="6" height="7"/><rect x="-11" y="19" width="22" height="5" rx="2"/></g>
+<text x="55" y="88" text-anchor="middle" fill="#70A5FD" font-size="12" font-weight="700">Repos</text>
+<text x="55" y="102" text-anchor="middle" fill="#A9B1D6" font-size="11">26</text></g>
+<g class="f" style="animation-delay:360ms" transform="translate(360 0)">
+<rect x=".5" y=".5" width="109" height="109" rx="10" fill="#0D1117" stroke="#30363D"/>
+<text x="100" y="20" text-anchor="end" fill="#7a7a7a" font-size="12" font-weight="800">C</text>
+<g transform="translate(55 44)" fill="#7a7a7a">
+<path d="M-16 -18 H16 V-6 C16 6 8 13 0 13 C-8 13 -16 6 -16 -6 Z"/>
+<path d="M-16 -14 H-23 C-23 -2 -18 2 -14 2" fill="none" stroke="#7a7a7a" stroke-width="3"/>
+<path d="M16 -14 H23 C23 -2 18 2 14 2" fill="none" stroke="#7a7a7a" stroke-width="3"/>
+<rect x="-3" y="12" width="6" height="7"/><rect x="-11" y="19" width="22" height="5" rx="2"/></g>
+<text x="55" y="88" text-anchor="middle" fill="#70A5FD" font-size="12" font-weight="700">Pull Reqs</text>
+<text x="55" y="102" text-anchor="middle" fill="#A9B1D6" font-size="11">0</text></g>
+<g class="f" style="animation-delay:480ms" transform="translate(480 0)">
+<rect x=".5" y=".5" width="109" height="109" rx="10" fill="#0D1117" stroke="#30363D"/>
+<text x="100" y="20" text-anchor="end" fill="#7a7a7a" font-size="12" font-weight="800">C</text>
+<g transform="translate(55 44)" fill="#7a7a7a">
+<path d="M-16 -18 H16 V-6 C16 6 8 13 0 13 C-8 13 -16 6 -16 -6 Z"/>
+<path d="M-16 -14 H-23 C-23 -2 -18 2 -14 2" fill="none" stroke="#7a7a7a" stroke-width="3"/>
+<path d="M16 -14 H23 C23 -2 18 2 14 2" fill="none" stroke="#7a7a7a" stroke-width="3"/>
+<rect x="-3" y="12" width="6" height="7"/><rect x="-11" y="19" width="22" height="5" rx="2"/></g>
+<text x="55" y="88" text-anchor="middle" fill="#70A5FD" font-size="12" font-weight="700">Followers</text>
+<text x="55" y="102" text-anchor="middle" fill="#A9B1D6" font-size="11">0</text></g>
+<g class="f" style="animation-delay:600ms" transform="translate(600 0)">
+<rect x=".5" y=".5" width="109" height="109" rx="10" fill="#0D1117" stroke="#30363D"/>
+<text x="100" y="20" text-anchor="end" fill="#7a7a7a" font-size="12" font-weight="800">C</text>
+<g transform="translate(55 44)" fill="#7a7a7a">
+<path d="M-16 -18 H16 V-6 C16 6 8 13 0 13 C-8 13 -16 6 -16 -6 Z"/>
+<path d="M-16 -14 H-23 C-23 -2 -18 2 -14 2" fill="none" stroke="#7a7a7a" stroke-width="3"/>
+<path d="M16 -14 H23 C23 -2 18 2 14 2" fill="none" stroke="#7a7a7a" stroke-width="3"/>
+<rect x="-3" y="12" width="6" height="7"/><rect x="-11" y="19" width="22" height="5" rx="2"/></g>
+<text x="55" y="88" text-anchor="middle" fill="#70A5FD" font-size="12" font-weight="700">Stars</text>
+<text x="55" y="102" text-anchor="middle" fill="#A9B1D6" font-size="11">0</text></g>
+<g class="f" style="animation-delay:720ms" transform="translate(720 0)">
+<rect x=".5" y=".5" width="109" height="109" rx="10" fill="#0D1117" stroke="#30363D"/>
+<text x="100" y="20" text-anchor="end" fill="#FFD700" font-size="12" font-weight="800">SS</text>
+<g transform="translate(55 44)" fill="#FFD700">
+<path d="M-16 -18 H16 V-6 C16 6 8 13 0 13 C-8 13 -16 6 -16 -6 Z"/>
+<path d="M-16 -14 H-23 C-23 -2 -18 2 -14 2" fill="none" stroke="#FFD700" stroke-width="3"/>
+<path d="M16 -14 H23 C23 -2 18 2 14 2" fill="none" stroke="#FFD700" stroke-width="3"/>
+<rect x="-3" y="12" width="6" height="7"/><rect x="-11" y="19" width="22" height="5" rx="2"/></g>
+<text x="55" y="88" text-anchor="middle" fill="#70A5FD" font-size="12" font-weight="700">Experience</text>
+<text x="55" y="102" text-anchor="middle" fill="#A9B1D6" font-size="11">6</text></g></svg>
