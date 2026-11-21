@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220" font-family="'Segoe UI', Ubuntu, 'Helvetica Neue', Arial, sans-serif">
+<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#7F00FF"/><stop offset="1" stop-color="#00D4FF"/></linearGradient>
+<style>@keyframes fade{from{opacity:0}to{opacity:1}}.t{opacity:0;animation:fade 1.2s ease .2s forwards}.s{opacity:0;animation:fade 1.2s ease .9s forwards}</style></defs>
+<g >
+<path fill="url(#g)" opacity=".35" d="M0 0 H900 V160 C675 185 540 170 405 185 S135 170 0 190 Z"><animate attributeName="d" dur="8s" repeatCount="indefinite" values="M0 0 H900 V160 C675 185 540 170 405 185 S135 170 0 190 Z;M0 0 H900 V180 C675 150 540 190 405 150 S135 190 0 155 Z;M0 0 H900 V160 C675 185 540 170 405 185 S135 170 0 190 Z"/></path>
+<path fill="url(#g)" d="M0 0 H900 V180 C675 150 540 190 405 150 S135 190 0 155 Z"><animate attributeName="d" dur="8s" repeatCount="indefinite" values="M0 0 H900 V180 C675 150 540 190 405 150 S135 190 0 155 Z;M0 0 H900 V160 C675 185 540 170 405 185 S135 170 0 190 Z;M0 0 H900 V180 C675 150 540 190 405 150 S135 190 0 155 Z"/></path>
+</g>
+<text class="t" x="50%" y="83.6" text-anchor="middle" fill="#fff" font-size="40" font-weight="700">Hi there, I&#39;m Mukul Goel 👋</text>
+<text class="s" x="50%" y="121.6" text-anchor="middle" fill="#fff" font-size="19" opacity=".9">Full Stack &amp; Mobile App Developer</text>
+</svg>
